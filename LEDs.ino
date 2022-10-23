@@ -3,11 +3,11 @@
 
 #include <LedControl.h>
 
-int DIN = 7; 
-int CS =  6;
-int CLK = 5;
+int DIN = 12; 
+int CS =  10;
+int CLK = 11;
 
-const int PulseWire = 4;       // PulseSensor PURPLE WIRE connected to ANALOG PIN 0
+const int PulseWire = 3;       // PulseSensor PURPLE WIRE connected to ANALOG PIN 0
 int Threshold = 610;           // Determine which Signal to "count as a beat" and which to ignore.
 
 PulseSensorPlayground pulseSensor;  // Creates an instance of the PulseSensorPlayground object called "pulseSensor"
