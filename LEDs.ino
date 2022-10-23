@@ -3,19 +3,20 @@
 
 #include <LedControl.h>
 
-int DIN = 12; 
-int CS =  10;
-int CLK = 11;
+int DIN = 7; 
+int CS =  6;
+int CLK = 5;
 
-const int PulseWire = 3;       // PulseSensor PURPLE WIRE connected to ANALOG PIN 0
+const int PulseWire = 4;       // PulseSensor PURPLE WIRE connected to ANALOG PIN 0
 int Threshold = 610;           // Determine which Signal to "count as a beat" and which to ignore.
 
 PulseSensorPlayground pulseSensor;  // Creates an instance of the PulseSensorPlayground object called "pulseSensor"
 LedControl lc = LedControl(DIN,CLK,CS,0);
 
-byte large[8] = {0x66,0xFF,0xFF,0xFF,0xFF,0x7E,0x3C,0x18,};
-byte med[8] = {0x00,0x00,0x66,0x7E,0x7E,0x3C,0x18,0x00,};
-byte small[8] = {0x00,0x00,0x00,0x18,0x18,0x00,0x00,0x00,};
+byte large[8] = {0x78, 0xfc, 0xfe, 0x7f, 0x7f, 0xfe, 0xfc, 0x78};
+byte med[8] = {0x00, 0x38, 0x3c, 0x1e, 0x1e, 0x3c, 0x38, 0x00,};
+byte medsmall[8] = {0x00, 0x00, 0x38, 0x1C, 0x1C, 0x38, 0x00, 0x00,};
+byte small[8] = {0x00, 0x00, 0x00, 0x18, 0x18, 0x00, 0x00, 0x00,};
 byte empty[8] = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,};
 int bpm = 0;
 double bps = 0;
@@ -43,13 +44,13 @@ void loop() {
 
   Serial.println(bpm);
   if(secondsPerBeat < 10000){
-  if(bpm <120){
-    smallLoop(secondsPerBeat);
-  }else if(bpm<205){
-    smallMedLoop(secondsPerBeat);
-  }else{
-    smallLargeLoop(secondsPerBeat);
-  }
+    if(bpm < 120){
+      smallLoop(secondsPerBeat);
+    }else if(bpm < 190){
+      smallMedLoop(secondsPerBeat);
+    }else{
+      smallLargeLoop(secondsPerBeat);
+    }
   }
 }
 void smallLoop(double rate){
@@ -59,11 +60,14 @@ void smallLoop(double rate){
   delay(round(0.5*rate));
 }
 void smallMedLoop(double rate) {
- 
   printByte(small);
-  delay(round(0.5*rate));
+  delay(round(0.25*rate));
+  printByte(medsmall);
+  delay(round(0.20*rate));
   printByte(med);
-  delay(round(0.5*rate));
+  delay(round(0.35*rate));
+  printByte(medsmall);
+  delay(round(0.20*rate));
 }
 void smallLargeLoop(double rate){
   printByte(small);
